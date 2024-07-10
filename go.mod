@@ -1,4 +1,5 @@
-module github.com/davecheney/httpstat
+module github.com/Herbert8/httpstat
+
 
 go 1.20
 

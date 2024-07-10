@@ -1,8 +1,8 @@
-TARGETS = linux-386 linux-amd64 linux-arm linux-arm64 darwin-amd64 windows-386 windows-amd64
+TARGETS = linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64 windows-arm64
 COMMAND_NAME = httpstat
-PACKAGE_NAME = github.com/davecheney/$(COMMAND_NAME)
+PACKAGE_NAME = github.com/Herbert8/$(COMMAND_NAME)
 LDFLAGS = -ldflags=-X=main.version=$(VERSION)
-OBJECTS = $(patsubst $(COMMAND_NAME)-windows-amd64%,$(COMMAND_NAME)-windows-amd64%.exe, $(patsubst $(COMMAND_NAME)-windows-386%,$(COMMAND_NAME)-windows-386%.exe, $(patsubst %,$(COMMAND_NAME)-%-v$(VERSION), $(TARGETS)))) 
+OBJECTS = $(patsubst $(COMMAND_NAME)-windows-amd64%,$(COMMAND_NAME)-windows-amd64%.exe, $(patsubst $(COMMAND_NAME)-windows-arm64%,$(COMMAND_NAME)-windows-arm64%.exe, $(patsubst %,$(COMMAND_NAME)-%-v$(VERSION), $(TARGETS))))
 
 release: check-env $(OBJECTS) ## Build release binaries (requires VERSION)
 
@@ -10,7 +10,7 @@ clean: check-env ## Remove release binaries
 	rm $(OBJECTS)
 
 $(OBJECTS): $(wildcard *.go)
-	env GOOS=`echo $@ | cut -d'-' -f2` GOARCH=`echo $@ | cut -d'-' -f3 | cut -d'.' -f 1` go build -o $@ $(LDFLAGS) $(PACKAGE_NAME)
+	env GOOS=$(echo $@ | cut -d'-' -f2) GOARCH=$(echo $@ | cut -d'-' -f3 | cut -d'.' -f 1) go build --ldflags="-s -w" -o build/$@ $(LDFLAGS) $(PACKAGE_NAME)
 
 .PHONY: help check-env
 

@@ -10,7 +10,7 @@ clean: check-env ## Remove release binaries
 	rm $(OBJECTS)
 
 $(OBJECTS): $(wildcard *.go)
-	env GOOS=$(echo $@ | cut -d'-' -f2) GOARCH=$(echo $@ | cut -d'-' -f3 | cut -d'.' -f 1) go build --ldflags="-s -w" -o build/$@ $(LDFLAGS) $(PACKAGE_NAME)
+	GOOS="$(shell echo $@ | cut -d'-' -f2)" GOARCH="$(shell echo $@ | cut -d'-' -f3 | cut -d'.' -f 1)" go build --ldflags="-s -w" -o build/$@ $(LDFLAGS) $(PACKAGE_NAME)
 
 .PHONY: help check-env
 
